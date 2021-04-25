@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>America Latina</title>
+	<link rel="stylesheet" href="./CSS/styles.css"/>
+
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDttNVJKvjJcj2rDPeA6uKKCn06OGPmVDo&callback=initMap"
+	type="text/javascript"></script>
+
+</head>
+<body>
+
+	<div class="container">
+        <button class="boton" onclick="traer()">Bogota</button>
+        <div id="contenido">
+		</div>
+
+		<div class="elementos">
+			<h2 id="titulos">Bandera</h2>
+			<figure>
+				<img src="./imagenes/colombia.png" id="bandera">
+			</figure>
+		</div>
+
+		<div class="elementos">
+			<h2 id="titulos">Ubicacin en Mapa</h2>
+        	<div id="map"></div>
+		</div>
+
+    </div>
+	<script src="./JS/app.js"></script>
+
+</body>
+</html>
+
+///////////// objetos
+
+// constructor obtejo 
+function Ciudad(nombre,clima,mapa,bandera) {
+    this.nombre = nombre;
+    this,clima = clima;
+    this.mapa = mapa;
+    this.bandera = bandera;
+};
+// objetos
+var bogota = new Ciudad(nombre,clima,mapa,bandera);
+var lima = new Ciudad(nombre,clima,mapa,bandera);
+var quito = new Ciudad(nombre,clima,mapa,bandera);
+var buenosaires = new Ciudad(nombre,clima,mapa,bandera);
+var santiago = new Ciudad(nombre,clima,mapa,bandera);
+var lapaz = new Ciudad(nombre,clima,mapa,bandera);
+var asuncion = new Ciudad(nombre,clima,mapa,bandera);
+var montevideo = new Ciudad(nombre,clima,mapa,bandera);
+var brasilia = new Ciudad(nombre,clima,mapa,bandera);
+var caracas = new Ciudad(nombre,clima,mapa,bandera);
+
+
+//////////////////////////// js
+
+var lat = null
+var lon = null
+
+var contenido = document.querySelector('#contenido')
+function traer() {
+
+    fetch('http://api.openweathermap.org/data/2.5/weather?q=bogota&appid=110744fd01ab8d8dc905c75a017f856c')
+    .then(res => res.json())
+    .then(data => {
+        console.log(data)
+        lat = (data.coord.lat)
+        lon = (data.coord.lon)
+        contenido.innerHTML = `
+        <p>Nombre: ${data.name}</p>
+        <p>Pais: ${data.sys.country}</p>
+        <p>Temperatura Actual: ${data.main.temp}</p>
+        <p>Temperatura Maxima: ${data.main.temp_max}</p>
+        <p>Temperatura Minima: ${data.main.temp_min}</p>
+        `
+    })
+
+    console.log("Esta es la latitud " + lat)
+    console.log("Esta es la longitud " + lon)
+}
+
+
+function initMap(){
+    var opc = {
+        zoom: 10,
+		center: {lat: 4.6097 ,lng: -74.0817}
+	}
+	var map = new google.maps.Map(document.getElementById('map'), opc);
+	var marker = new google.maps.Marker({
+        position: {lat: 4.6097 ,lng: -74.0817},
+      	map: map
+	});
+}
+
+
+
+///////////// objetos
+
+function Pais(pais,capital,poblacion,region,subregion, moneda) {
+    this.pais = pais;
+    this.capital= capital;
+    this.poblacion = poblacion;
+    this.region = region;
+    this.subregion = subregion;
+    this.moneda = moneda;
+
+var paises = [];
+
+function obtenerPais() {
+
+  var obtenerP = document.getElementById("pais").value;
+  return obtenerP;
+
+}
+function obtenerCapital() {
+
+  var obtenerC = document.getElementById("capital").value;
+  return obtenerC;
+}
+function obtenerPoblacion() {
+
+    var obtenerPob = document.getElementById("poblacion").value;
+    return obtenerPob;
+  }
+function obtenerRegion() {
+    var obtenerR = document.getElementById("region").value;
+    return obtenerR;
+}
+function obtenerSubregion() {
+    var obtenerSr = document.getElementById("subregion").value;
+    return obtenerSr;
+}
+function obtenerMoneda() {
+    var obtenerM = document.getElementById("moneda").value;
+    return obtenerM;
+}
+function crearPais() {
+
+  var pai = new Pais(paises.length + 1, obtenerPais(), obtenerCapital(),obtenerPoblacion(),obtenerRegion(),obtenerSubregion(),obtenerMoneda(), 0);
+  paises.push(pai);
+  mostrarListado();
+}
+
+function mostrarListado(){
+  var lista='';
+  for(var i=0; i<paises.length; i++){
+    lista+= 'id: ' + paises[i].id +
+      ' pais: ' + paises[i].pais +
+      ' capital: ' + paises[i].capital +
+      ' poblacion: ' + paises[i].poblacion +
+      ' region: ' + paises[i].region +
+      ' subregion: ' + paises[i].subregion +
+      ' moneda: ' + paises[i].moneda +'\n';
+  }
+  document.getElementById('listado').innerText = lista;
+}
+mostrarListado();
